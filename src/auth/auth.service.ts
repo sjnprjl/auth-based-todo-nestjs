@@ -22,9 +22,12 @@ export class AuthService {
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
-  async validateUser(username: string, password: string): Promise<User> {
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<User | undefined> {
     const user = await this.userService.findOne({ username });
-    if (user && (await argon2.verify(user.password, password))) {
+    if (user && argon2.verify(user.password, password)) {
       const result = { ...user };
       delete result.password;
       return result;
