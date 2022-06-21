@@ -3,6 +3,7 @@ import {
   ConflictException,
   HttpStatus,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
@@ -15,6 +16,7 @@ import {
   PG_UNIQUE_VIOLATION,
 } from 'src/helpers/postgres-error-codes';
 import * as argon from 'argon2';
+import { NoContentException } from 'src/helpers/exceptions/noContentException';
 @Injectable()
 export class AuthService {
   constructor(
@@ -54,6 +56,7 @@ export class AuthService {
     };
   }
   async register(dto: AuthRegistrationDto) {
+    console.log(dto);
     try {
       await this.userService.create({
         ...dto,
@@ -77,5 +80,12 @@ export class AuthService {
         }
       }
     }
+  }
+
+  async delete(id: number) {
+    const user = await this.userService.findOne({ id });
+    if (!user) throw new NotFoundException();
+    await this.userService.deleteById(id);
+    throw new NoContentException('Deleted');
   }
 }
