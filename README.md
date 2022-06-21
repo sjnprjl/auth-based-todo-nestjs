@@ -18,6 +18,7 @@ $ npm install
 ## Configuration
 Create `.env` file in your root directory. Configure the following environment variables.
 ```bash
+NODE_ENV=development
 JWT_SECRET=your-secret
 JWT_EXPIRES_IN=1h
 DB_USER=db-user
