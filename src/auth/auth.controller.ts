@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthLoginDto, AuthRegistrationDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { Public } from '../shared/decorators/public.decorator';
@@ -6,10 +6,12 @@ import { Public } from '../shared/decorators/public.decorator';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  @Public()
   @Post('login')
-  login(@Body() body: AuthLoginDto) {
-    return this.authService.login(body);
+  @Public()
+  async login(
+    @Body() loginDto: AuthLoginDto,
+  ): Promise<{ access_token: string }> {
+    return this.authService.login(loginDto);
   }
 
   @Public()

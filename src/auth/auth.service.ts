@@ -14,8 +14,7 @@ import {
   PG_NOT_NULL_VIOLATION,
   PG_UNIQUE_VIOLATION,
 } from 'src/helpers/postgres-error-codes';
-import * as argon2 from 'argon2';
-
+import * as argon from 'argon2';
 @Injectable()
 export class AuthService {
   constructor(
@@ -27,10 +26,14 @@ export class AuthService {
     password: string,
   ): Promise<User | undefined> {
     const user = await this.userService.findOne({ username });
-    if (user && argon2.verify(user.password, password)) {
-      const result = { ...user };
-      delete result.password;
-      return result;
+    try {
+      if (user && (await argon.verify(user.password, password))) {
+        const result = { ...user };
+        return result;
+      }
+    } catch (err) {
+      console.log(err);
+      throw err;
     }
     return null;
   }
@@ -54,7 +57,7 @@ export class AuthService {
     try {
       await this.userService.create({
         ...dto,
-        password: await argon2.hash(dto.password),
+        password: await argon.hash(dto.password),
       });
     } catch (err) {
       if (queryFailedGuard(err)) {
