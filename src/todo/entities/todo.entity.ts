@@ -33,7 +33,4 @@ export class Todo {
     name: 'userId',
   })
   user: User;
-
-  @OneToMany(() => Image, (image) => image.todo)
-  image: Image[];
 }
