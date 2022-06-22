@@ -22,7 +22,7 @@ export class TodoController {
   }
   @Post()
   async createTodo(@Request() req: any, @Body() body: CreateTodoDto) {
-    this.todoService.create(req.user.userId, body);
+    return this.todoService.create(req.user.userId, body);
   }
   @Get(':id')
   async getSingleTodo(@Request() req: any, @Param('id') todoId: number) {
