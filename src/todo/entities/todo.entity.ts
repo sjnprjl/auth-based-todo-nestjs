@@ -5,9 +5,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Image } from './image.entity';
 
 @Entity()
 export class Todo {
@@ -31,4 +33,7 @@ export class Todo {
     name: 'userId',
   })
   user: User;
+
+  @OneToMany(() => Image, (image) => image.todo)
+  image: Image[];
 }
