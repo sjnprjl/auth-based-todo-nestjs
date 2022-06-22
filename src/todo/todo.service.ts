@@ -4,7 +4,7 @@ import { NoContentException } from 'src/helpers/exceptions/noContentException';
 import { Repository } from 'typeorm';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { CreateTodoDto } from './dto/create-todo.dto';
-import { Todo } from './todo.entity';
+import { Todo } from './entities/todo.entity';
 
 @Injectable()
 export class TodoService {
@@ -24,7 +24,8 @@ export class TodoService {
     return found;
   }
   async create(userId: number, dto: CreateTodoDto) {
-    return await this.todoRepository.save({ ...dto, userId });
+    const todo = await this.todoRepository.save({ ...dto, userId });
+    return todo;
   }
   async update(userId: number, todoId: number, dto: UpdateTodoDto) {
     return await this.todoRepository.update({ id: todoId, userId }, dto);
