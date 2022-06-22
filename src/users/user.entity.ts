@@ -1,4 +1,4 @@
-import { Todo } from 'src/todo/todo.entity';
+import { Todo } from 'src/todo/entities/todo.entity';
 import {
   Column,
   CreateDateColumn,
